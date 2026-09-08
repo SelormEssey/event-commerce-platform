@@ -24,9 +24,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
-.env
+# environment files (only the placeholder example is versioned)
+.env*
+!.env.example
 
 # vercel
 .vercel
@@ -34,3 +34,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated database client and local package cache
+/src/generated/
+/.pnpm-store/

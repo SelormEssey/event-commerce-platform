@@ -1,0 +1,13 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Identity only. Market configuration belongs to src/config/countries.ts.
+model Country {
+  code String @id @db.Char(2)
+}

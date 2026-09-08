@@ -1,0 +1,56 @@
+:root {
+  color-scheme: dark;
+
+  --background: #131513;
+  --background-elevated: #1b1e1b;
+  --card: #222622;
+  --border: #3c413c;
+  --control-border: #767e76;
+  --text-primary: #f0eee6;
+  --text-secondary: #b8bdb4;
+  --interactive-primary: #a5c1fa;
+  --interactive-primary-hover: #c1d4fc;
+  --interactive-secondary: #303830;
+  --interactive-secondary-hover: #3c473c;
+  --text-on-interactive: #182033;
+  --success: #a9d9b8;
+  --warning: #edca88;
+  --error: #f5aca5;
+  --accent-lilac: #d3baf4;
+  --accent-coral: #f1b2a2;
+  --focus: #c1d4fc;
+
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-mono: 'Courier New', monospace;
+  --text-small: 0.875rem;
+  --text-body: 1rem;
+  --text-heading: clamp(1.75rem, 3vw, 2.25rem);
+  --text-display: clamp(2.15rem, 4vw, 3.5rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --radius-control: 0.375rem;
+  --radius-panel: 0.75rem;
+  --content-width: 76rem;
+  --touch-target: 2.75rem;
+  --motion-fast: 120ms;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-elevated: var(--background-elevated);
+  --color-card: var(--card);
+  --color-border: var(--border);
+  --color-primary: var(--text-primary);
+  --color-secondary: var(--text-secondary);
+  --color-interactive: var(--interactive-primary);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-error: var(--error);
+  --color-accent: var(--accent-lilac);
+}

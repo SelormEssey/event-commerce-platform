@@ -3,6 +3,7 @@ import type { Language } from '../i18n/locales';
 type CountryConfiguration = {
   name: string;
   currency: string;
+  currencyFractionDigits: number;
   defaultLanguage: Language;
   defaultLocale: string;
   paymentMethods: readonly { id: string; label: string }[];
@@ -14,6 +15,7 @@ export const countries = {
   SL: {
     name: 'Sierra Leone',
     currency: 'SLE',
+    currencyFractionDigits: 2,
     defaultLanguage: 'en',
     defaultLocale: 'en-SL',
     paymentMethods: [],
@@ -22,6 +24,7 @@ export const countries = {
   GH: {
     name: 'Ghana',
     currency: 'GHS',
+    currencyFractionDigits: 2,
     defaultLanguage: 'en',
     defaultLocale: 'en-GH',
     paymentMethods: [],
@@ -30,6 +33,7 @@ export const countries = {
   CI: {
     name: 'Côte d’Ivoire',
     currency: 'XOF',
+    currencyFractionDigits: 0,
     defaultLanguage: 'fr',
     defaultLocale: 'fr-CI',
     paymentMethods: [],
@@ -38,6 +42,7 @@ export const countries = {
 } as const satisfies Record<string, CountryConfiguration>;
 
 export type CountryCode = keyof typeof countries;
+export type CurrencyCode = (typeof countries)[CountryCode]['currency'];
 export const countryCodes = Object.keys(countries) as CountryCode[];
 export const prototypeDefault = { country: 'SL', language: 'en' } as const;
 

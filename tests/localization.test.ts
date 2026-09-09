@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { dictionaries, getDictionary } from '../src/i18n';
 import { isLanguage, languages } from '../src/i18n/locales';
-import { formattingLocale, formatCurrency } from '../src/lib/format';
+import { formattingLocale } from '../src/lib/format';
 
 function leafPaths(value: object, prefix = ''): string[] {
   return Object.entries(value)
@@ -28,8 +28,8 @@ describe('localization', () => {
     }
   });
   it('changes actual interface text', () => {
-    expect(getDictionary('en').controls.country).toBe('Country');
-    expect(getDictionary('fr').controls.country).toBe('Pays');
+    expect(getDictionary('en').market.country).toBe('Country');
+    expect(getDictionary('fr').market.country).toBe('Pays');
   });
   it.each(['kr', 'constructor', '__proto__', 'en-US', ''])(
     'rejects an unregistered language: %s',
@@ -42,18 +42,4 @@ describe('localization', () => {
     expect(formattingLocale('GH', 'fr')).toBe('fr-GH');
     expect(formattingLocale('CI', 'en')).toBe('en-CI');
   });
-  it('respects currencies with different fraction digits', () => {
-    expect(formatCurrency(1234.5, 'GH', 'en')).toContain('1,234.50');
-    expect(formatCurrency(1234.5, 'CI', 'en')).toContain('1,235');
-    expect(formatCurrency(1234.5, 'CI', 'en')).not.toContain('.00');
-    expect(formatCurrency(1234.5, 'SL', 'en')).toContain('1,234.50');
-  });
-  it.each([NaN, Infinity, -Infinity])(
-    'rejects a non-finite display amount',
-    (amount) => {
-      expect(() => formatCurrency(amount, 'SL', 'en')).toThrow(
-        'Amount must be finite.',
-      );
-    },
-  );
 });

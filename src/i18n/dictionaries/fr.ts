@@ -2,100 +2,92 @@ import type { Dictionary } from './en';
 
 export const fr = {
   metadata: {
-    title: 'Plateforme — Sprint 0',
+    title: 'Découvrir des événements — Prototype',
     description:
-      'Les fondations techniques et visuelles d’une plateforme de billetterie pour plusieurs pays.',
+      'Découvrez des événements prototypes fictifs en Sierra Leone, au Ghana et en Côte d’Ivoire.',
   },
   navigation: {
-    platform: 'Plateforme',
-    foundation: 'Fondations',
+    platform: 'Événements',
+    discover: 'Découvrir',
     skip: 'Aller au contenu',
+    prototype: 'Prototype fictif',
   },
-  intro: {
-    eyebrow: 'SPRINT 0 / FONDATIONS',
-    title: 'L’affiche s’exprime.\nLa plateforme lui fait place.',
-    description:
-      'Des fondations communes à la Sierra Leone, au Ghana et à la Côte d’Ivoire. Explorez les pays, les langues et le système visuel.',
-    scope: 'Aperçu des fondations · Aucun événement ni achat pour le moment',
-  },
-  controls: {
-    title: 'Choisissez votre contexte',
+  market: {
     country: 'Pays',
     language: 'Langue',
-    help: 'Changer de pays sélectionne sa langue par défaut. Vous pouvez ensuite choisir une autre langue sans changer de devise.',
-    currency: 'Devise',
-    locale: 'Format régional',
-    updating: 'Mise à jour de votre sélection…',
-    selected: 'Sélection actuelle',
-    invalid:
+    updating: 'Mise à jour de la sélection…',
+  },
+  discovery: {
+    eyebrow: 'ÉVÉNEMENTS / DÉCOUVERTE',
+    title: 'À l’affiche à',
+    subtitle: 'Trouvez une soirée, une scène ou un lieu qui vous ressemble.',
+    searchLabel: 'Rechercher des événements',
+    searchPlaceholder: 'Titre, lieu, ville ou organisateur',
+    searchButton: 'Rechercher',
+    clearSearch: 'Effacer la recherche',
+    featured: 'À la une',
+    upcoming: 'Événements à venir',
+    categories: 'Catégories',
+    all: 'Tout',
+    results: 'événements trouvés',
+    oneResult: 'événement trouvé',
+    noMatches: 'Aucun événement ne correspond à votre recherche.',
+    noMatchesDetail:
+      'Essayez une autre recherche ou effacez le filtre de catégorie.',
+    invalidCountry:
       'Ce pays n’est pas pris en charge. La Sierra Leone est sélectionnée à la place.',
+    invalidCategory:
+      'Cette catégorie n’est pas disponible. Tous les événements sont affichés.',
   },
-  artwork: {
-    eyebrow: '01 / ESPACE POUR L’AFFICHE',
-    title: 'Place à l’expression.',
-    placeholder: 'L’affiche de l’événement trouvera sa place ici.',
-    note: 'Un espace vide pour l’affiche d’un futur événement. Ce n’est pas une annonce.',
-    caption: 'Une interface discrète. L’affiche apporte la couleur.',
-    ratio: 'ESPACE AFFICHE / 4:5',
+  event: {
+    from: 'À partir de',
+    at: 'à',
+    by: 'Par',
+    details: 'Détails de l’événement',
+    tickets: 'Billets',
+    venue: 'Lieu',
+    organizer: 'Organisateur',
+    date: 'Date',
+    time: 'Horaire',
+    age: 'Âge',
+    refund: 'Conditions d’annulation et de remboursement',
+    back: 'Retour à la découverte',
+    getTickets: 'Prendre des billets',
+    purchasingLater: 'L’achat de billets arrivera dans un prochain sprint.',
+    remaining: 'restants',
   },
-  interaction: {
-    eyebrow: '02 / INTERACTION',
-    title: 'Chaque étape est claire.',
-    description:
-      'Essayez une action simple pour voir le retour visuel. Le focus clavier et les boutons désactivés font partie du même système.',
-    primary: 'Afficher le retour',
-    secondary: 'Réinitialiser',
-    disabled: 'Indisponible',
-    pending: 'En cours…',
-    idle: 'Aucune action pour le moment. Essayez « Afficher le retour ».',
-    success: 'L’action de démonstration est terminée.',
-    successLabel: 'SUCCÈS',
-    warningLabel: 'ATTENTION',
-    warning: 'Un exemple qui nécessite votre attention.',
-    errorLabel: 'ERREUR',
-    error: 'Un exemple à corriger.',
-    focusHint:
-      'Utilisez Tab pour passer d’un contrôle à l’autre. Chaque état possède un libellé.',
+  availability: {
+    AVAILABLE: 'Disponible',
+    SOLD_OUT: 'Complet',
+    SALE_NOT_STARTED: 'Vente bientôt ouverte',
+    SALE_ENDED: 'Vente terminée',
   },
-  system: {
-    eyebrow: '03 / FONDATIONS COMMUNES',
-    title: 'Un système. Trois pays.',
-    countries: 'Configuration des pays',
-    countriesDetail:
-      'Devises, valeurs par défaut et moyens disponibles dans un registre typé.',
-    languages: 'Dictionnaires de traduction',
-    languagesDetail:
-      'Anglais et français aujourd’hui, avec la possibilité d’ajouter d’autres langues.',
-    database: 'PostgreSQL + Prisma',
-    databaseDetail:
-      'Uniquement les identifiants des pays. La connexion est vérifiée séparément.',
-    tokens: 'Couleurs sémantiques',
-    tokensDetail:
-      'Surfaces, textes, actions et retours partagent une même palette.',
-    surface: 'Surface',
-    text: 'Texte',
-    action: 'Action',
-    accent: 'Expression',
+  categories: {
+    CONCERTS: 'Concerts',
+    PARTIES: 'Soirées',
+    FESTIVALS: 'Festivals',
+    NIGHTLIFE: 'Vie nocturne',
+    SPORTS: 'Sports',
+    ARTS_CULTURE: 'Arts et culture',
+    CONFERENCES: 'Conférences',
+    OTHER: 'Autre',
   },
   footer: {
-    scope: 'Sprint 0 uniquement',
-    next: 'Prochaine étape prévue : événements',
-    policy: 'La politique financière n’est pas configurée.',
+    scope: 'Données fictives du Sprint 1',
+    policy: 'L’achat n’est pas disponible dans ce prototype.',
   },
   loading: {
-    title: 'Chargement de votre contexte…',
-    detail: 'Préparation des fondations dans la langue sélectionnée.',
+    title: 'Chargement des événements…',
+    detail: 'Préparation de la découverte pour le pays sélectionné.',
   },
   error: {
-    title: 'Cette page n’a pas pu être chargée.',
-    detail:
-      'Réessayez. Le pays et la langue sélectionnés sont conservés dans l’adresse.',
+    title: 'Cette vue n’a pas pu être chargée.',
+    detail: 'Réessayez ou revenez à la découverte des événements.',
     retry: 'Réessayer',
-    home: 'Retour aux fondations',
+    home: 'Retour à la découverte',
   },
   notFound: {
-    title: 'Cette page n’est pas disponible.',
-    detail:
-      'Revenez aux fondations pour sélectionner un pays et une langue pris en charge.',
+    title: 'Cet événement n’est pas disponible.',
+    detail: 'Il n’est peut-être pas publié ou l’adresse est incorrecte.',
   },
 } satisfies Dictionary;

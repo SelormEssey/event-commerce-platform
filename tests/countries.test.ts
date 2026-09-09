@@ -27,6 +27,12 @@ describe('market selection', () => {
     },
   );
 
+  it('defines currency precision in the market registry', () => {
+    expect(countries.SL.currencyFractionDigits).toBe(2);
+    expect(countries.GH.currencyFractionDigits).toBe(2);
+    expect(countries.CI.currencyFractionDigits).toBe(0);
+  });
+
   it('uses a documented default when the country is absent', () => {
     expect(resolveCountry(undefined)).toEqual({ code: 'SL', invalid: false });
     expect(

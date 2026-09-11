@@ -1,4 +1,4 @@
-# ticketingprototype
+# event-commerce-platform
 
 A mobile-first, poster-first public event discovery prototype for Sierra Leone, Ghana, and Côte d’Ivoire. The repository name is retained; no product or company name has been assigned.
 

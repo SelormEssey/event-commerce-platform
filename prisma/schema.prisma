@@ -13,6 +13,16 @@ model Country {
   venues Venue[]
 }
 
+model Organizer {
+  id          String   @id @default(uuid()) @db.Uuid
+  slug        String   @unique
+  displayName String
+  about       String?
+  events      Event[]
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @db.Timestamptz(3)
+}
+
 enum EventCategory {
   CONCERTS
   PARTIES
@@ -31,6 +41,11 @@ enum EventStatus {
   COMPLETED
 }
 
+enum PromotionType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
 model Venue {
   id          String   @id @default(uuid()) @db.Uuid
   name        String
@@ -46,44 +61,86 @@ model Venue {
 }
 
 model Event {
-  id                   String         @id @default(uuid()) @db.Uuid
-  slug                 String         @unique
+  id                   String        @id @default(uuid()) @db.Uuid
+  slug                 String        @unique
   organizerDisplayName String
+  organizerId          String?       @db.Uuid
+  organizer            Organizer?    @relation(fields: [organizerId], references: [id], onDelete: Restrict)
   title                String
   description          String
   category             EventCategory
   artworkReference     String?
-  venueId              String         @db.Uuid
-  venue                Venue          @relation(fields: [venueId], references: [id], onDelete: Restrict)
-  startDateTime        DateTime       @db.Timestamptz(3)
-  endDateTime          DateTime       @db.Timestamptz(3)
-  status               EventStatus    @default(DRAFT)
+  venueId              String        @db.Uuid
+  venue                Venue         @relation(fields: [venueId], references: [id], onDelete: Restrict)
+  startDateTime        DateTime      @db.Timestamptz(3)
+  endDateTime          DateTime      @db.Timestamptz(3)
+  status               EventStatus   @default(DRAFT)
   ageRestriction       String?
   refundPolicy         String
   featuredRank         Int?
-  publishedAt          DateTime?      @db.Timestamptz(3)
+  publishedAt          DateTime?     @db.Timestamptz(3)
   ticketTiers          TicketTier[]
-  createdAt            DateTime       @default(now()) @db.Timestamptz(3)
-  updatedAt            DateTime       @updatedAt @db.Timestamptz(3)
+  promotions           Promotion[]
+  createdAt            DateTime      @default(now()) @db.Timestamptz(3)
+  updatedAt            DateTime      @updatedAt @db.Timestamptz(3)
 
   @@index([status, startDateTime])
+  @@index([organizerId, status, startDateTime])
   @@index([venueId])
 }
 
 model TicketTier {
-  id                String   @id @default(uuid()) @db.Uuid
-  eventId           String   @db.Uuid
-  event             Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  id                String                @id @default(uuid()) @db.Uuid
+  eventId           String                @db.Uuid
+  event             Event                 @relation(fields: [eventId], references: [id], onDelete: Cascade)
   name              String
   description       String?
   priceMinor        BigInt
-  currency          String   @db.Char(3)
+  currency          String                @db.Char(3)
   capacity          Int
   availableQuantity Int
-  salesStart        DateTime @db.Timestamptz(3)
-  salesEnd          DateTime @db.Timestamptz(3)
-  createdAt         DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt         DateTime @updatedAt @db.Timestamptz(3)
+  salesStart        DateTime              @db.Timestamptz(3)
+  salesEnd          DateTime              @db.Timestamptz(3)
+  createdAt         DateTime              @default(now()) @db.Timestamptz(3)
+  updatedAt         DateTime              @updatedAt @db.Timestamptz(3)
+  promotionLinks    PromotionTicketTier[]
 
+  @@unique([id, eventId])
   @@index([eventId, salesStart, salesEnd])
+}
+
+model Promotion {
+  id                    String                @id @default(uuid()) @db.Uuid
+  eventId               String                @db.Uuid
+  event                 Event                 @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  code                  String
+  name                  String
+  type                  PromotionType
+  percentageBasisPoints Int?
+  fixedAmountMinor      BigInt?
+  currency              String?               @db.Char(3)
+  startsAt              DateTime              @db.Timestamptz(3)
+  endsAt                DateTime              @db.Timestamptz(3)
+  usageLimit            Int?
+  isActive              Boolean               @default(false)
+  attributionLabel      String?
+  ticketTierLinks       PromotionTicketTier[]
+  createdAt             DateTime              @default(now()) @db.Timestamptz(3)
+  updatedAt             DateTime              @updatedAt @db.Timestamptz(3)
+
+  @@unique([eventId, code])
+  @@unique([id, eventId])
+  @@index([eventId, isActive, startsAt, endsAt])
+}
+
+model PromotionTicketTier {
+  promotionId       String     @db.Uuid
+  promotionEventId  String     @db.Uuid
+  ticketTierId      String     @db.Uuid
+  ticketTierEventId String     @db.Uuid
+  promotion         Promotion  @relation(fields: [promotionId, promotionEventId], references: [id, eventId], onDelete: Cascade)
+  ticketTier        TicketTier @relation(fields: [ticketTierId, ticketTierEventId], references: [id, eventId], onDelete: Cascade)
+
+  @@id([promotionId, ticketTierId])
+  @@index([ticketTierId])
 }

@@ -12,7 +12,7 @@ import { resolveCountry } from '../../../../config/countries';
 import { getDictionary } from '../../../../i18n';
 import { isLanguage } from '../../../../i18n/locales';
 import { eventAvailability } from '../../../../modules/events/availability';
-import { getPublicEventBySlug } from '../../../../modules/events/public-events';
+import { getActivePublicEventBySlug } from '../../../../modules/events/public-events.server';
 import {
   formatEventDate,
   formatEventTimeRange,
@@ -28,7 +28,7 @@ export async function generateMetadata({
 }: PageProps): Promise<Metadata> {
   const { locale, slug } = await params;
   if (!isLanguage(locale)) notFound();
-  const event = await getPublicEventBySlug(slug);
+  const event = await getActivePublicEventBySlug(slug);
   if (!event) return { title: getDictionary(locale).notFound.title };
   return {
     title: `${event.title} — Prototype`,
@@ -43,7 +43,7 @@ export default async function EventDetailPage({
 }: PageProps) {
   const [{ locale, slug }, query] = await Promise.all([params, searchParams]);
   if (!isLanguage(locale)) notFound();
-  const event = await getPublicEventBySlug(slug);
+  const event = await getActivePublicEventBySlug(slug);
   if (!event) notFound();
 
   const selectedCountry = resolveCountry(query.country);
@@ -137,7 +137,9 @@ export default async function EventDetailPage({
               </div>
               <div>
                 <dt>{text.event.organizer}</dt>
-                <dd>{event.organizerDisplayName}</dd>
+                <dd>
+                  {event.organizer?.displayName ?? event.organizerDisplayName}
+                </dd>
               </div>
               {event.ageRestriction && (
                 <div>

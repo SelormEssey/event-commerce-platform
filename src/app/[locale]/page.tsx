@@ -8,7 +8,7 @@ import { countries, resolveCountry } from '../../config/countries';
 import { getDictionary } from '../../i18n';
 import { isLanguage } from '../../i18n/locales';
 import { resolveCategory } from '../../modules/events/categories';
-import { listPublicEvents } from '../../modules/events/public-events';
+import { listActivePublicEvents } from '../../modules/events/public-events.server';
 
 type PageProps = {
   params: Promise<{ locale: string }>;
@@ -38,7 +38,7 @@ export default async function DiscoveryPage({
   const category = resolveCategory(query.category);
   const search =
     typeof query.q === 'string' ? query.q.trim().slice(0, 100) : '';
-  const events = await listPublicEvents({
+  const events = await listActivePublicEvents({
     country: country.code,
     search,
     ...(category.category ? { category: category.category } : {}),

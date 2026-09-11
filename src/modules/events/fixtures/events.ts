@@ -7,6 +7,7 @@ import type {
   VenueRecord,
 } from '../domain';
 import { money } from '../money';
+import { prototypeOrganizerForDisplayName } from '../../organizers/fixtures/organizers';
 
 function fixtureId(group: number, index: number) {
   return `00000000-0000-4000-${group.toString().padStart(4, '0')}-${index
@@ -93,15 +94,23 @@ type EventInput = {
   refundPolicy: string;
   ageRestriction?: string;
   featuredRank?: number;
+  status?: EventRecord['status'];
   ticketTiers: readonly TicketTierRecord[];
 };
 
 function event(index: number, input: EventInput): EventRecord {
+  const { organizerDisplayName, status = 'PUBLISHED', ...eventDetails } = input;
+  const organizer = prototypeOrganizerForDisplayName(organizerDisplayName);
   return {
     id: fixtureId(8201, index),
-    ...input,
-    status: 'PUBLISHED',
-    publishedAt: '2026-09-01T12:00:00.000Z',
+    ...eventDetails,
+    organizerDisplayName,
+    organizerId: organizer.id,
+    organizer,
+    status,
+    ...(status === 'PUBLISHED'
+      ? { publishedAt: '2026-09-01T12:00:00.000Z' }
+      : {}),
   };
 }
 
@@ -401,5 +410,91 @@ export const prototypeEvents = [
     ],
   }),
 ] as const satisfies readonly EventRecord[];
+
+export const prototypeDraftEvents = [
+  event(10, {
+    slug: 'harbour-lines-workshop',
+    title: 'Harbour Lines Workshop',
+    description:
+      'A fictional draft workshop programme exploring field recording and collaborative composition.',
+    organizerDisplayName: 'Open Current Collective',
+    category: 'ARTS_CULTURE',
+    artwork: {
+      treatment: 'frame',
+      tone: 'blue',
+      alt: 'Abstract blue frames for Harbour Lines Workshop.',
+    },
+    venue: venues.freetownStudio,
+    startDateTime: '2027-05-08T13:00:00.000Z',
+    endDateTime: '2027-05-08T18:00:00.000Z',
+    refundPolicy: standardRefund,
+    status: 'DRAFT',
+    ticketTiers: [],
+  }),
+  event(11, {
+    slug: 'parallel-room-study',
+    title: 'Parallel Room Study',
+    description:
+      'A fictional draft listening session pairing short performances with an open studio conversation.',
+    organizerDisplayName: 'Parallel Sound Room',
+    category: 'CONCERTS',
+    artwork: {
+      treatment: 'grid',
+      tone: 'coral',
+      alt: 'Abstract coral grid for Parallel Room Study.',
+    },
+    venue: venues.accraHall,
+    startDateTime: '2027-05-22T17:00:00.000Z',
+    endDateTime: '2027-05-22T21:00:00.000Z',
+    refundPolicy: standardRefund,
+    status: 'DRAFT',
+    ticketTiers: [
+      tier(14, {
+        name: 'Studio pass',
+        minorUnits: '14000',
+        currency: 'GHS',
+        capacity: 90,
+        availableQuantity: 90,
+        salesStart: '2027-03-01T09:00:00.000Z',
+        salesEnd: '2027-05-22T16:00:00.000Z',
+      }),
+    ],
+  }),
+  event(12, {
+    slug: 'fenetre-sonore',
+    title: 'Fenêtre sonore',
+    description:
+      'Un projet fictif en préparation autour de l’écoute, du mouvement et de formes sonores courtes.',
+    organizerDisplayName: 'Atelier Minuit',
+    category: 'NIGHTLIFE',
+    artwork: {
+      treatment: 'rays',
+      tone: 'lilac',
+      alt: 'Rayons violets abstraits pour Fenêtre sonore.',
+    },
+    venue: venues.abidjanTerrace,
+    startDateTime: '2027-06-12T19:00:00.000Z',
+    endDateTime: '2027-06-13T01:00:00.000Z',
+    ageRestriction: '18+',
+    refundPolicy: conditionsVente,
+    status: 'DRAFT',
+    ticketTiers: [
+      tier(15, {
+        name: 'Entrée prototype',
+        minorUnits: '9000',
+        currency: 'XOF',
+        capacity: 120,
+        availableQuantity: 120,
+        salesStart: '2027-04-01T09:00:00.000Z',
+        salesEnd: '2027-06-12T18:00:00.000Z',
+      }),
+    ],
+  }),
+] as const satisfies readonly EventRecord[];
+
+export const prototypeAllEvents: readonly EventRecord[] = [
+  ...prototypeEvents,
+  ...prototypeDraftEvents,
+];
 
 export const prototypeVenues = Object.values(venues);

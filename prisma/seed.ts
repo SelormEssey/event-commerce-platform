@@ -1,8 +1,11 @@
 import { countryCodes } from '../src/config/countries';
 import {
-  prototypeEvents,
+  prototypeAllEvents,
   prototypeVenues,
 } from '../src/modules/events/fixtures/events';
+import { prototypeOrganizers } from '../src/modules/organizers/fixtures/organizers';
+import { prototypePromotions } from '../src/modules/promotions/fixtures/promotions';
+import type { PromotionRecord } from '../src/modules/promotions/domain';
 import { createScriptDatabase } from '../scripts/database';
 
 async function seed() {
@@ -12,6 +15,17 @@ async function seed() {
       data: countryCodes.map((code) => ({ code })),
       skipDuplicates: true,
     });
+    for (const organizer of prototypeOrganizers) {
+      await database.organizer.upsert({
+        where: { id: organizer.id },
+        create: organizer,
+        update: {
+          slug: organizer.slug,
+          displayName: organizer.displayName,
+          about: organizer.about ?? null,
+        },
+      });
+    }
     for (const venue of prototypeVenues) {
       await database.venue.upsert({
         where: { id: venue.id },
@@ -24,13 +38,14 @@ async function seed() {
         },
       });
     }
-    for (const event of prototypeEvents) {
+    for (const event of prototypeAllEvents) {
       await database.event.upsert({
         where: { id: event.id },
         create: {
           id: event.id,
           slug: event.slug,
           organizerDisplayName: event.organizerDisplayName,
+          organizerId: event.organizerId ?? null,
           title: event.title,
           description: event.description,
           category: event.category,
@@ -42,11 +57,12 @@ async function seed() {
           ageRestriction: event.ageRestriction ?? null,
           refundPolicy: event.refundPolicy,
           featuredRank: event.featuredRank ?? null,
-          publishedAt: event.publishedAt,
+          publishedAt: event.publishedAt ?? null,
         },
         update: {
           slug: event.slug,
           organizerDisplayName: event.organizerDisplayName,
+          organizerId: event.organizerId ?? null,
           title: event.title,
           description: event.description,
           category: event.category,
@@ -58,7 +74,7 @@ async function seed() {
           ageRestriction: event.ageRestriction ?? null,
           refundPolicy: event.refundPolicy,
           featuredRank: event.featuredRank ?? null,
-          publishedAt: event.publishedAt,
+          publishedAt: event.publishedAt ?? null,
         },
       });
       for (const ticketTier of event.ticketTiers) {
@@ -89,8 +105,73 @@ async function seed() {
         });
       }
     }
+    for (const promotion of prototypePromotions as readonly PromotionRecord[]) {
+      await database.promotion.upsert({
+        where: { id: promotion.id },
+        create: {
+          id: promotion.id,
+          eventId: promotion.eventId,
+          code: promotion.code,
+          name: promotion.name,
+          type: promotion.type,
+          percentageBasisPoints:
+            promotion.type === 'PERCENTAGE'
+              ? promotion.percentageBasisPoints
+              : null,
+          fixedAmountMinor:
+            promotion.type === 'FIXED_AMOUNT'
+              ? BigInt(promotion.fixedAmount.minorUnits)
+              : null,
+          currency:
+            promotion.type === 'FIXED_AMOUNT'
+              ? promotion.fixedAmount.currency
+              : null,
+          startsAt: promotion.startsAt,
+          endsAt: promotion.endsAt,
+          usageLimit: promotion.usageLimit ?? null,
+          isActive: promotion.isActive,
+          attributionLabel: promotion.attributionLabel ?? null,
+        },
+        update: {
+          eventId: promotion.eventId,
+          code: promotion.code,
+          name: promotion.name,
+          type: promotion.type,
+          percentageBasisPoints:
+            promotion.type === 'PERCENTAGE'
+              ? promotion.percentageBasisPoints
+              : null,
+          fixedAmountMinor:
+            promotion.type === 'FIXED_AMOUNT'
+              ? BigInt(promotion.fixedAmount.minorUnits)
+              : null,
+          currency:
+            promotion.type === 'FIXED_AMOUNT'
+              ? promotion.fixedAmount.currency
+              : null,
+          startsAt: promotion.startsAt,
+          endsAt: promotion.endsAt,
+          usageLimit: promotion.usageLimit ?? null,
+          isActive: promotion.isActive,
+          attributionLabel: promotion.attributionLabel ?? null,
+        },
+      });
+      await database.promotionTicketTier.deleteMany({
+        where: { promotionId: promotion.id },
+      });
+      if (promotion.ticketTierIds.length > 0) {
+        await database.promotionTicketTier.createMany({
+          data: promotion.ticketTierIds.map((ticketTierId) => ({
+            promotionId: promotion.id,
+            promotionEventId: promotion.eventId,
+            ticketTierId,
+            ticketTierEventId: promotion.eventId,
+          })),
+        });
+      }
+    }
     console.info(
-      'Country identifiers and fictional Sprint 1 event fixtures seeded.',
+      'Country, organizer, event, ticket tier, and promotion fixtures seeded.',
     );
   } finally {
     await database.$disconnect();

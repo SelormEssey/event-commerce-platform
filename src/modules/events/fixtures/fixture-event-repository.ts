@@ -1,11 +1,11 @@
 import type { EventRepository } from '../repository';
-import { prototypeEvents } from './events';
+import { prototypeAllEvents } from './events';
 
 export const fixtureEventRepository: EventRepository = {
   async list() {
-    return prototypeEvents;
+    return prototypeAllEvents;
   },
   async findBySlug(slug) {
-    return prototypeEvents.find((event) => event.slug === slug);
+    return prototypeAllEvents.find((event) => event.slug === slug);
   },
 };

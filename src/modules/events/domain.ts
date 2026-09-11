@@ -1,4 +1,5 @@
 import type { CountryCode, CurrencyCode } from '../../config/countries';
+import type { OrganizerSummary } from '../organizers/domain';
 
 export const eventCategories = [
   'CONCERTS',
@@ -51,6 +52,8 @@ export type EventRecord = {
   id: string;
   slug: string;
   organizerDisplayName: string;
+  organizerId?: string;
+  organizer?: OrganizerSummary;
   title: string;
   description: string;
   category: EventCategory;
@@ -62,6 +65,6 @@ export type EventRecord = {
   ageRestriction?: string;
   refundPolicy: string;
   featuredRank?: number;
-  publishedAt: string;
+  publishedAt?: string;
   ticketTiers: readonly TicketTierRecord[];
 };

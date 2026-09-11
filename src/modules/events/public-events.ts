@@ -34,7 +34,7 @@ export function filterPublicEvents(
           event.title,
           event.venue.name,
           event.venue.city,
-          event.organizerDisplayName,
+          event.organizer?.displayName ?? event.organizerDisplayName,
         ].join(' '),
       ).includes(search);
     })

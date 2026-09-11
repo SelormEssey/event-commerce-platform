@@ -1,13 +1,13 @@
 # Security rules
 
-Sprint 0 is a public foundation demonstration. It contains no authentication, private organizer data, transactions, or payment processing. It is not a production ticketing service.
+Sprint 2 is a local prototype with organizer-shaped data but no authentication, private account data, transactions, or payment processing. It is not a production ticketing service.
 
 ## Secrets and environment variables
 
 - Never commit `.env`, `.env.*`, credentials, database passwords, provider secrets, or session keys. Only the placeholder `.env.example` is tracked.
 - Read application secrets through `src/lib/env.server.ts`. It validates configuration and is marked `server-only`; the database module is also marked `server-only`.
 - `src/validation/environment.ts` validates inputs without exposing the supplied connection string in error messages. Database scripts also redact connection errors.
-- No browser environment variables are needed in Sprint 0. `NEXT_PUBLIC_` values are embedded into browser bundles and must always be safe for anyone to read.
+- No browser environment variables are needed in Sprint 2. `NEXT_PUBLIC_` values are embedded into browser bundles and must always be safe for anyone to read.
 - Do not log raw request bodies, tokens, payment responses, or personal data when later integrations are added. Redact before logging, not afterward.
 - If a secret is accidentally exposed, revoke/rotate it immediately. Removing a file from the latest commit is not sufficient to remove it from Git history.
 
@@ -19,12 +19,14 @@ Sprint 0 is a public foundation demonstration. It contains no authentication, pr
 - The provided Compose service binds to loopback only. Its initialization user is for local development only. A future deployment must separate migration privileges from the least-privilege application role.
 - Use verified TLS for nonlocal database connections. Do not disable certificate validation to make a connection succeed.
 - `db:deploy` applies reviewed migrations; it does not generate changes or reset data. `db:migrate` is for local development only. Review generated migration SQL before applying it.
-- The seed only inserts missing country identifiers; it never deletes or rewrites existing records. The database check performs a read query and disconnects.
+- The repeatable prototype seed upserts stable fictional organizers, venues, events, tiers, and promotions; it does not delete unrelated records. The database check performs a read query and disconnects.
 - Each application process reuses a bounded connection pool. Revisit total connection limits for the eventual deployment's process/instance count.
 
-## Authentication and organizer isolation in later sprints
+## Prototype organizer isolation and future authentication
 
-- Role constants are vocabulary, not authentication or authorization. There are no mock sessions or trusted browser-supplied roles.
+- The organizer selector is demonstration context, not authentication. It is isolated in a server-only resolver and must be replaced by a verified session before any private or production data is used.
+- Organizer event, ticket-tier, and promotion services require a current organizer ID and verify ownership against repository data. URL parameters, hidden inputs, UI visibility, and unguessable IDs are not accepted as proof of ownership.
+- Negative cross-organizer and cross-event tests protect this service boundary, but the prototype selector still permits anyone with local access to switch identities by design.
 - Before private records exist, establish verified server-side sessions with secure, HttpOnly, SameSite cookies, expiration, rotation, revocation, and appropriate CSRF protection.
 - Derive the organizer scope from the authenticated user's verified membership. Never trust an organizer ID, role, URL parameter, or country selector as proof of access.
 - Every private organizer read and write must enforce ownership/membership on the server. An unguessable record ID is not an access check. Organizer A must never read or mutate Organizer B's private data.

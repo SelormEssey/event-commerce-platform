@@ -2,8 +2,7 @@
 
 A mobile-first, poster-first public event discovery prototype for Sierra Leone, Ghana, and Côte d’Ivoire. The repository name is retained; no product or company name has been assigned.
 
-
-![Platform preview](docs/screenshots/platform-preview.png) 
+![Public event discovery preview](docs/screenshots/platform-preview.png)
 
 ## Sprint 2 scope
 

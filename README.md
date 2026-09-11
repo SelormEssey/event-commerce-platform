@@ -2,6 +2,9 @@
 
 A mobile-first, poster-first public event discovery prototype for Sierra Leone, Ghana, and Côte d’Ivoire. The repository name is retained; no product or company name has been assigned.
 
+
+![Platform preview](docs/screenshots/platform-preview.png) 
+
 ## Sprint 2 scope
 
 Sprint 2 adds a localized organizer workspace for profile management, event creation and editing, ticket-tier management, explicit publish/unpublish actions, and promotion configuration. The workspace is available at `/[locale]/organizer?country=SL&organizer=open-current-collective`; the selector is clearly prototype-only and does not represent authentication.
